@@ -1,6 +1,6 @@
 # direct_visual_lidar_calibration_mod
 
-This package is a fork of [direct_lidar_calibration](https://github.com/koide3/direct_lidar_calibration).
+This package is a fork of [direct_visual_lidar_calibration](https://github.com/koide3/direct_visual_lidar_calibration).
 
 It seperates the non-ROS code from the ROS code, so one can build the direct_visual_lidar_calibration library, initial_guess, and calibrate without ROS. If you have rosbag files first, you must use preprocess ROS tool to generate point clouds and images from rosbag files.
 
