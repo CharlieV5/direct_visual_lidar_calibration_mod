@@ -45,9 +45,9 @@ add_library(direct_visual_lidar_calibration SHARED
 )
 target_include_directories(direct_visual_lidar_calibration PUBLIC
   include
-  ../thirdparty/json/include
-  ../thirdparty/nanoflann/include
-  ../thirdparty/Sophus
+  ../3rdparty/json/include
+  ../3rdparty/nanoflann/include
+  ../3rdparty/Sophus
   ${Boost_INCLUDE_DIRS}
   ${CERES_INCLUDE_DIRS}
   ${GTSAM_INCLUDE_DIRS}

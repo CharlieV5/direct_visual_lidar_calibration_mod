@@ -28,10 +28,9 @@ find_package(Iridescence REQUIRED)
 
 include_directories(
   ../include
-  ../thirdparty/json/include
-  ../thirdparty/Bonxai/include
-  ../thirdparty/nanoflann/include
-  ../thirdparty/Sophus
+  ../3rdparty/json/include
+  ../3rdparty/nanoflann/include
+  ../3rdparty/Sophus
   ${Boost_INCLUDE_DIRS}
   ${CERES_INCLUDE_DIRS}
   ${GTSAM_INCLUDE_DIRS}
@@ -93,7 +92,6 @@ target_link_libraries(preprocess_map
   direct_visual_lidar_calibration
   Iridescence::Iridescence
   ${Boost_LIBRARIES}
-  # ${PCL_LIBRARIES}
   ${OpenCV_LIBRARIES}
 )
 
