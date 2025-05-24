@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <deque>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <camera/generic_camera_base.hpp>
@@ -35,13 +36,13 @@ public:
    * @return T_camera_lidar
    */
   Eigen::Isometry3d
-  estimate(const camera::GenericCameraBase::ConstPtr& proj, const std::vector<std::pair<Eigen::Vector2d, Eigen::Vector4d>>& correspondences, std::vector<bool>* inliers = nullptr);
+  estimate(const camera::GenericCameraBase::ConstPtr& proj, const std::vector<std::pair<Eigen::Vector2d, Eigen::Vector4d>>& correspondences, std::deque<bool>* inliers = nullptr);
 
 private:
   Eigen::Matrix3d estimate_rotation_ransac(
     const camera::GenericCameraBase::ConstPtr& proj,
     const std::vector<std::pair<Eigen::Vector2d, Eigen::Vector4d>>& correspondences,
-    std::vector<bool>* inliers);
+    std::deque<bool>* inliers);
 
   Eigen::Isometry3d estimate_pose_lsq(
     const camera::GenericCameraBase::ConstPtr& proj,
@@ -49,7 +50,7 @@ private:
     const Eigen::Isometry3d& T_camera_lidar);
 
 private:
-  const PoseEstimationParams params;
+  const PoseEstimationParams m_params;
 };
 
 }  // namespace vlcal

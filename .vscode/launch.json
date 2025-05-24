@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ROS2 Debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/install/dvlc_preprocess_rosbag/lib/dvlc_preprocess_rosbag/preprocess",
+            "args": [
+                "--data_path",
+                "${workspaceFolder}/livox",
+                "--dst_path",
+                "${workspaceFolder}/livox_preprocessed2",
+                "-av"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "miDebuggerPath": "/usr/bin/gdb"
+        }
+    ]
+}

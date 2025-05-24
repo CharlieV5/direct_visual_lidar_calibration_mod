@@ -118,7 +118,7 @@ public:
 
     PoseEstimation pose_estimation(params);
 
-    std::vector<bool> inliers;
+    std::deque<bool> inliers;
     Eigen::Isometry3d T_camera_lidar = pose_estimation.estimate(proj, correspondences, &inliers);
 
     const Eigen::Isometry3d T_lidar_camera = T_camera_lidar.inverse();

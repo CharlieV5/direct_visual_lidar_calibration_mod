@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build (ROS2)",
+      "type": "shell",
+      "command": "source /opt/ros/rolling/setup.bash && colcon build --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo",
+      "group": "build"
+    }
+  ]
+}

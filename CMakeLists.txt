@@ -21,13 +21,26 @@ else()
 endif()
 
 find_package(PCL REQUIRED)
-find_package(Ceres REQUIRED)
-find_package(GTSAM REQUIRED)
+find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options)
 find_package(Iridescence REQUIRED)
 
-set(OLD_DISTRO "humble;galactic;foxy")
+include_directories(
+  ../include
+  ../thirdparty/json/include
+  ../thirdparty/Bonxai/include
+  ../thirdparty/nanoflann/include
+  ../thirdparty/Sophus
+  ${Boost_INCLUDE_DIRS}
+  ${CERES_INCLUDE_DIRS}
+  ${GTSAM_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${Eigen3_INCLUDE_DIRS}
+)
+
+set(OLD_DISTRO "humble;galactic;foxy;rolling")
 if($ENV{ROS_DISTRO} IN_LIST OLD_DISTRO)
   add_definitions(-DCV_BRIDGE_INCLUDE_H)
 else()
@@ -40,48 +53,7 @@ if (OPENMP_FOUND)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 endif()
 
-# direct_visual_lidar_calibration
-add_library(direct_visual_lidar_calibration SHARED
-  src/camera/create_camera.cpp
-  src/vlcal/common/frame.cpp
-  src/vlcal/common/frame_cpu.cpp
-  src/vlcal/common/ivox.cpp
-  src/vlcal/common/cloud_covariance_estimation.cpp
-  src/vlcal/common/time_keeper.cpp
-  src/vlcal/common/estimate_fov.cpp
-  src/vlcal/common/estimate_pose.cpp
-  src/vlcal/common/points_color_updater.cpp
-  src/vlcal/common/visual_lidar_data.cpp
-  src/vlcal/common/visual_lidar_visualizer.cpp
-  src/vlcal/preprocess/preprocess.cpp
-  src/vlcal/preprocess/generate_lidar_image.cpp
-  src/vlcal/preprocess/static_point_cloud_integrator.cpp
-  src/vlcal/preprocess/dynamic_point_cloud_integrator.cpp
-  src/vlcal/calib/cost_calculator_nid.cpp
-  src/vlcal/calib/view_culling.cpp
-  src/vlcal/calib/visual_camera_calibration.cpp
-)
-target_include_directories(direct_visual_lidar_calibration PUBLIC
-  include
-  thirdparty/json/include
-  thirdparty/Bonxai/include
-  thirdparty/nanoflann/include
-  thirdparty/Sophus
-  ${Boost_INCLUDE_DIRS}
-  ${CERES_INCLUDE_DIRS}
-  ${GTSAM_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
-  ${OpenCV_INCLUDE_DIRS}
-)
-target_link_libraries(direct_visual_lidar_calibration
-  fmt
-  ${Boost_LIBRARIES}
-  ${PCL_LIBRARIES}
-  ${CERES_LIBRARIES}
-  ${GTSAM_LIBRARIES}
-  ${OpenCV_LIBRARIES}
-  Iridescence::Iridescence
-)
+add_subdirectory(direct_visual_lidar_calibration-nonROS)
 
 
 if($ENV{ROS_VERSION} EQUAL 1)
@@ -114,67 +86,25 @@ add_executable(preprocess_map
 )
 target_include_directories(preprocess_map PRIVATE
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 )
 target_link_libraries(preprocess_map
   direct_visual_lidar_calibration
-)
-
-# initial_guess_manual
-add_executable(initial_guess_manual
-  src/initial_guess_manual.cpp
-)
-target_include_directories(initial_guess_manual PRIVATE
-  ${catkin_INCLUDE_DIRS}
-)
-target_link_libraries(initial_guess_manual
-  direct_visual_lidar_calibration
-)
-
-# initial_guess_auto
-add_executable(initial_guess_auto
-  src/initial_guess_auto.cpp
-)
-target_include_directories(initial_guess_auto PRIVATE
-  ${catkin_INCLUDE_DIRS}
-)
-target_link_libraries(initial_guess_auto
-  direct_visual_lidar_calibration
-)
-
-# calibrate
-add_executable(calibrate
-  src/calibrate.cpp
-)
-target_include_directories(calibrate PRIVATE
-  ${catkin_INCLUDE_DIRS}
-)
-target_link_libraries(calibrate
-  direct_visual_lidar_calibration
-)
-
-# viewer
-add_executable(viewer
-  src/viewer.cpp
-)
-target_include_directories(viewer PRIVATE
-  ${catkin_INCLUDE_DIRS}
-)
-target_link_libraries(viewer
-  direct_visual_lidar_calibration
+  Iridescence::Iridescence
+  ${Boost_LIBRARIES}
+  # ${PCL_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 install(
   TARGETS
-  direct_visual_lidar_calibration
+  
 )
 
 install(
   TARGETS
-  preprocess_map
-  initial_guess_manual
-  initial_guess_auto
-  calibrate
-  viewer
+  preprocess_map 
   DESTINATION
   lib/${PROJECT_NAME}
 )
